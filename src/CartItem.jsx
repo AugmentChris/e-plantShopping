@@ -3,12 +3,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
+export const addItem = (item) => {
+    console.log("Item added to cart:", item); 
+};
+
 const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
+    let total = 0;
+
+    cart.forEach(item => {
+        const itemCost = parseFloat(item.cost.substring(1)); // Remove the "$" and convert the cost to a number
+        total += item.quantity * itemCost; // Multiply the cost by the quantity and add it to the total
+      });
+  
+      return total; // Return the total cost
  
   };
 
@@ -30,6 +42,8 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
+    const itemCost = parseFloat(item.cost.substring(1)); // Remove the "$" and convert the cost to a number
+    return item.quantity * itemCost; // Return the total cost for this item
   };
 
   return (
